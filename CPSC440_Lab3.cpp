@@ -2,7 +2,6 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5//allegro_primitives.h>
-#include <allegro5/allegro_native_dialog.h>
 #include <stdio.h>
 
 int main()
@@ -35,6 +34,9 @@ int main()
     }
 
     al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
+
     al_register_event_source(EventQueue, al_get_display_event_source(display));
 
     if (!al_install_mouse()) {
@@ -58,6 +60,13 @@ int main()
     ALLEGRO_COLOR bg = black;
     ALLEGRO_COLOR fg = white;
 
+    //Fonts
+    ALLEGRO_FONT *CourierNew_pt24 = al_load_font("cour.ttf", 24, 0);
+    ALLEGRO_FONT *BroadwayRegular_pt24 = al_load_font("BROADW.TTF", 24, 0);
+    ALLEGRO_FONT *CenturyGothic_pt24 = al_load_font("GOTHIC.TTF", 24, 0);
+    ALLEGRO_FONT *OnyxRegular_pt24 = al_load_font("ONYX.TTF", 24, 0);
+    ALLEGRO_FONT *font;
+
     while (!exit) {
 
         //Draws object at center of screen at start of program
@@ -67,17 +76,20 @@ int main()
             al_draw_filled_circle(x, y, 5, fg);
 
             al_flip_display();
-        }
 
+            firstLoop = false;
+        }
         al_wait_for_event(EventQueue, &Event);
 
         if (Event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             exit = true;
         }
         else if (Event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-            draw = true;
-            x = Event.mouse.x;
-            y = Event.mouse.y;
+            if (Event.mouse.button & 1) {
+                draw = true;
+                x = Event.mouse.x;
+                y = Event.mouse.y;
+            }
         }
 
         if (draw) {
@@ -85,25 +97,30 @@ int main()
                 if (y < 300) {
                     bg = white;
                     fg = black;
+                    font = CourierNew_pt24;
                 }
                 else {
                     bg = blue;
                     fg = yellow;
+                    font = BroadwayRegular_pt24;
                 }
             }
             else {
                 if (y < 300) {
                     bg = black;
                     fg = white;
+                    font = CenturyGothic_pt24;
                 }
                 else {
                     bg = yellow;
                     fg = blue;
+                    font = OnyxRegular_pt24;
                 }
             }
             al_clear_to_color(bg);
 
             al_draw_filled_circle(x, y, 5, fg);
+            al_draw_textf(font, fg, x, y, ALLEGRO_ALIGN_LEFT, "Coords: (%i, %i)", x, y);
 
             al_flip_display();
 
