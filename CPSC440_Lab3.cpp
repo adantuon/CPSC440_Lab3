@@ -34,11 +34,15 @@ int main()
         return(-1);
     }
 
-    //Get events from keyboard
-    al_register_event_source(EventQueue, al_get_keyboard_event_source());
-
     al_init_primitives_addon();
     al_register_event_source(EventQueue, al_get_display_event_source(display));
+
+    if (!al_install_mouse()) {
+        fprintf(stderr, "Mouse Initialization failed\n");
+        return(-1);
+    }
+
+    al_register_event_source(EventQueue, al_get_mouse_event_source());
 
     bool exit = false;
     int x = 400;
