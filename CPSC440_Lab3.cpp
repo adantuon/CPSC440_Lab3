@@ -45,19 +45,58 @@ int main()
     al_register_event_source(EventQueue, al_get_mouse_event_source());
 
     bool exit = false;
+    bool draw = false;
     int x = 400;
     int y = 300;
 
+    //Color Palette
+    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
+    ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
+    ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
+    ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
+    ALLEGRO_COLOR bg = black;
+    ALLEGRO_COLOR fg = white;
+
     while (!exit) {
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-
-        al_flip_display();
-
         al_wait_for_event(EventQueue, &Event);
 
         if (Event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             exit = true;
         }
+        else if (Event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+            draw = true;
+            x = Event.mouse.x;
+            y = Event.mouse.y;
+        }
+
+        if (draw) {
+            if (x <= 400) {
+                if (y <= 300) {
+                    bg = white;
+                    fg = black;
+                }
+                else {
+                    bg = blue;
+                    fg = yellow;
+                }
+            }
+            else {
+                if (y <= 300) {
+                    bg = black;
+                    fg = white;
+                }
+                else {
+                    bg = yellow;
+                    fg = blue;
+                }
+            }
+            al_clear_to_color(bg);
+
+            al_draw_filled_circle(x, y, 5, fg);
+
+            al_flip_display();
+        }
+
     }
 
     al_destroy_display(display);
