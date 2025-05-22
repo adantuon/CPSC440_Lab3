@@ -46,6 +46,7 @@ int main()
 
     bool exit = false;
     bool draw = false;
+    bool firstLoop = true;
     int x = 400;
     int y = 300;
 
@@ -58,6 +59,16 @@ int main()
     ALLEGRO_COLOR fg = white;
 
     while (!exit) {
+
+        //Draws object at center of screen at start of program
+        if (firstLoop) {
+            al_clear_to_color(bg);
+
+            al_draw_filled_circle(x, y, 5, fg);
+
+            al_flip_display();
+        }
+
         al_wait_for_event(EventQueue, &Event);
 
         if (Event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -70,8 +81,8 @@ int main()
         }
 
         if (draw) {
-            if (x <= 400) {
-                if (y <= 300) {
+            if (x < 400) {
+                if (y < 300) {
                     bg = white;
                     fg = black;
                 }
@@ -81,7 +92,7 @@ int main()
                 }
             }
             else {
-                if (y <= 300) {
+                if (y < 300) {
                     bg = black;
                     fg = white;
                 }
@@ -95,6 +106,8 @@ int main()
             al_draw_filled_circle(x, y, 5, fg);
 
             al_flip_display();
+
+            draw = false;
         }
 
     }
